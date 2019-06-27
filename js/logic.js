@@ -8,8 +8,15 @@ class List extends React.Component {
         super(props);
     }
     render() {
+        var updatedList=this.props.list;
+        var displayedList = [];
+        for (let i=0; i<updatedList.length; i++){
+            displayedList.push(<li key={i}>{updatedList[i].task+" on "+updatedList[i].day+updatedList[i].month+updatedList[i].year}</li>)
+        }
         return (
-            <div></div>
+            <ul>
+                {displayedList}
+            </ul>
         )
     }
 }
@@ -19,8 +26,20 @@ class App extends React.Component {
         this.state = {
             listItems: []
         }
+        this.getDay = this.getDay.bind(this);
+        this.getMonth = this.getMonth.bind(this);
+        this.getYear = this.getYear.bind(this);
         this.saveNewItem = this.saveNewItem.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
+    }
+    getDay(input){
+        this.day = input;
+    }
+    getMonth(input){
+        this.month = input;
+    }
+    getYear(input){
+        this.year = input;
     }
     saveNewItem(input) {
         this.newTask = input;
@@ -29,13 +48,17 @@ class App extends React.Component {
         event.preventDefault();
         var newItem = {
             task: this.newTask.value,
-            day: "c"
+            day: this.day.value,
+            month: this.month.value,
+            year: this.year.value
         }
-        var task = this.newTask.value;
+        console.log(newItem);
+        var allItems = this.state.listItems;
+        allItems.push(newItem);
+        console.log(allItems);
         this.setState({
-            listItems: this.state.listItems.push(task)
+            listItems: allItems
         })
-        debugger;
     }
     render() {
         //var days=["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30"];
@@ -57,17 +80,18 @@ class App extends React.Component {
             <div>
                 <input type="text" ref={this.saveNewItem}></input>
                 <div>
-                    <select>
+                    <select ref={this.getDay}>
                         {displayDays}
                     </select>
-                    <select>
+                    <select ref={this.getMonth}>
                         {displayMonths}
                     </select>
-                    <select>
+                    <select ref={this.getYear}>
                         {displayYears}
                     </select>
                 </div>
                 <input type="submit" value="Add" onClick={this.handleAdd}></input>
+                <List list = {this.state.listItems}></List>
             </div>
         )
     }
