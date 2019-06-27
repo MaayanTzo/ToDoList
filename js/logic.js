@@ -99,16 +99,13 @@ class App extends React.Component {
     }
     moveToDone(selectedItem) {
         var sliceIt = selectedItem.textContent.indexOf("on");
-        console.log(sliceIt);
         var activity = selectedItem.textContent.slice(0, sliceIt);
-        console.log(activity);
         var activityDate = selectedItem.textContent.split(/\s(?=\w)/);
-        console.log(activityDate);
         var itemDone = {
             task: activity,
-            day: activityDate[2],
-            month: activityDate[3],
-            year: activityDate[4]
+            day: activityDate[activityDate.length-3],
+            month: activityDate[activityDate.length-2],
+            year: activityDate[activityDate.length-1]
         }
         var doneList = this.state.doneItems;
         doneList.push(itemDone);
@@ -128,9 +125,9 @@ class App extends React.Component {
         console.log(activityDate);
         var itemToDo = {
             task: activity,
-            day: activityDate[2],
-            month: activityDate[3],
-            year: activityDate[4]
+            day: activityDate[activityDate.length-3],
+            month: activityDate[activityDate.length-2],
+            year: activityDate[activityDate.length-1]
         }
         //console.log(itemToDo);
         var toDoList = this.state.listItems;
