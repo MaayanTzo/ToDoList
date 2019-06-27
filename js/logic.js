@@ -8,7 +8,7 @@ class List extends React.Component {
         super(props);
         this.markAsDone = this.markAsDone.bind(this);
     }
-    markAsDone(event){
+    markAsDone(event) {
         //console.log(event.target);
         //console.log(event.target.id);
         this.props.handleMove(event.target);
@@ -30,19 +30,26 @@ class List extends React.Component {
     }
 }
 class Done extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
+        this.markAsToDo = this.markAsToDo.bind(this);
     }
-    render(){
+    markAsToDo(event) {
+        //console.log(event.target);
+        this.props.handleMoveBack(event.target);
+    }
+    render() {
         var doneList = this.props.allDone;
         var displayedDone = [];
-        for (let i=0; i<doneList.length; i++){
-            displayedDone.push(<li key={i} id={i}>{doneList[i]}</li>)
+        for (let i = 0; i < doneList.length; i++) {
+            displayedDone.push(<li key={i} id={i}>{doneList[i].task + " on " + doneList[i].day + " " + doneList[i].month + " " + doneList[i].year}</li>)
         }
-        return(
+        return (
             <div>
                 <h3>Done: </h3>
-                <div>{displayedDone}</div>
+                <ul onClick={this.markAsToDo}>
+                    {displayedDone}
+                </ul>
             </div>
         )
     }
@@ -60,6 +67,7 @@ class App extends React.Component {
         this.saveNewItem = this.saveNewItem.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
         this.moveToDone = this.moveToDone.bind(this);
+        this.moveBackToDo = this.moveBackToDo.bind(this);
     }
     getDay(input) {
         this.day = input;
@@ -89,16 +97,49 @@ class App extends React.Component {
             listItems: allItems
         })
     }
-    moveToDone(selectedItem){
-        //console.log(selectedItem)
+    moveToDone(selectedItem) {
+        var sliceIt = selectedItem.textContent.indexOf("on");
+        console.log(sliceIt);
+        var activity = selectedItem.textContent.slice(0, sliceIt);
+        console.log(activity);
+        var activityDate = selectedItem.textContent.split(/\s(?=\w)/);
+        console.log(activityDate);
+        var itemDone = {
+            task: activity,
+            day: activityDate[2],
+            month: activityDate[3],
+            year: activityDate[4]
+        }
         var doneList = this.state.doneItems;
-        doneList.push(selectedItem.textContent);
-        //console.log(doneList);
+        doneList.push(itemDone);
         var done = this.state.listItems;
-        done.splice(selectedItem.id,1);
+        done.splice(selectedItem.id, 1);
         this.setState({
             listItems: done,
             doneItems: doneList
+        })
+    }
+    moveBackToDo(selectedItem) {
+        console.log(selectedItem);
+        var sliceIt = selectedItem.textContent.indexOf("on");
+        var activity = selectedItem.textContent.slice(0, sliceIt);
+        console.log(activity);
+        var activityDate = selectedItem.textContent.split(/\s(?=\w)/);
+        console.log(activityDate);
+        var itemToDo = {
+            task: activity,
+            day: activityDate[2],
+            month: activityDate[3],
+            year: activityDate[4]
+        }
+        //console.log(itemToDo);
+        var toDoList = this.state.listItems;
+        toDoList.push(itemToDo);
+        var toDo = this.state.doneItems;
+        toDo.splice(selectedItem.id, 1);
+        this.setState({
+            listItems: toDoList,
+            doneItems: toDo
         })
     }
     render() {
@@ -133,7 +174,7 @@ class App extends React.Component {
                 </div>
                 <input type="submit" value="Add" onClick={this.handleAdd}></input>
                 <List list={this.state.listItems} handleMove={this.moveToDone}></List>
-                <Done allDone={this.state.doneItems}></Done>
+                <Done allDone={this.state.doneItems} handleMoveBack={this.moveBackToDo}></Done>
             </div>
         )
     }
