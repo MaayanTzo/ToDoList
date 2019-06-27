@@ -6,17 +6,36 @@ var date = {
 class List extends React.Component {
     constructor(props) {
         super(props);
+        this.markAsDone = this.markAsDone.bind(this);
+    }
+    markAsDone(){
+
     }
     render() {
-        var updatedList=this.props.list;
+        var updatedList = this.props.list;
         var displayedList = [];
-        for (let i=0; i<updatedList.length; i++){
-            displayedList.push(<li key={i}>{updatedList[i].task+" on "+updatedList[i].day+updatedList[i].month+updatedList[i].year}</li>)
+        for (let i = 0; i < updatedList.length; i++) {
+            displayedList.push(<li key={i}>{updatedList[i].task + " on " + updatedList[i].day + " " + updatedList[i].month + " " + updatedList[i].year}</li>)
         }
         return (
-            <ul>
-                {displayedList}
-            </ul>
+            <div>
+                <h3>To Do: </h3>
+                <ul onClick={this.markAsDone}>
+                    {displayedList}
+                </ul>
+            </div>
+        )
+    }
+}
+class Done extends React.Component {
+    constructor(props){
+        super(props);
+    }
+    render(){
+        return(
+            <div>
+                <h3>Done: </h3>
+            </div>
         )
     }
 }
@@ -32,13 +51,13 @@ class App extends React.Component {
         this.saveNewItem = this.saveNewItem.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
     }
-    getDay(input){
+    getDay(input) {
         this.day = input;
     }
-    getMonth(input){
+    getMonth(input) {
         this.month = input;
     }
-    getYear(input){
+    getYear(input) {
         this.year = input;
     }
     saveNewItem(input) {
@@ -91,7 +110,8 @@ class App extends React.Component {
                     </select>
                 </div>
                 <input type="submit" value="Add" onClick={this.handleAdd}></input>
-                <List list = {this.state.listItems}></List>
+                <List list={this.state.listItems}></List>
+                <Done></Done>
             </div>
         )
     }
