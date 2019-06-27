@@ -8,14 +8,16 @@ class List extends React.Component {
         super(props);
         this.markAsDone = this.markAsDone.bind(this);
     }
-    markAsDone(){
-
+    markAsDone(event){
+        //console.log(event.target);
+        //console.log(event.target.id);
+        this.props.handleMove(event.target);
     }
     render() {
         var updatedList = this.props.list;
         var displayedList = [];
         for (let i = 0; i < updatedList.length; i++) {
-            displayedList.push(<li key={i}>{updatedList[i].task + " on " + updatedList[i].day + " " + updatedList[i].month + " " + updatedList[i].year}</li>)
+            displayedList.push(<li key={i} id={i}>{updatedList[i].task + " on " + updatedList[i].day + " " + updatedList[i].month + " " + updatedList[i].year}</li>)
         }
         return (
             <div>
@@ -32,9 +34,15 @@ class Done extends React.Component {
         super(props);
     }
     render(){
+        var doneList = this.props.allDone;
+        var displayedDone = [];
+        for (let i=0; i<doneList.length; i++){
+            displayedDone.push(<li key={i} id={i}>{doneList[i]}</li>)
+        }
         return(
             <div>
                 <h3>Done: </h3>
+                <div>{displayedDone}</div>
             </div>
         )
     }
@@ -43,13 +51,15 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            listItems: []
+            listItems: [],
+            doneItems: []
         }
         this.getDay = this.getDay.bind(this);
         this.getMonth = this.getMonth.bind(this);
         this.getYear = this.getYear.bind(this);
         this.saveNewItem = this.saveNewItem.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
+        this.moveToDone = this.moveToDone.bind(this);
     }
     getDay(input) {
         this.day = input;
@@ -71,12 +81,24 @@ class App extends React.Component {
             month: this.month.value,
             year: this.year.value
         }
-        console.log(newItem);
+        //console.log(newItem);
         var allItems = this.state.listItems;
         allItems.push(newItem);
-        console.log(allItems);
+        //console.log(allItems);
         this.setState({
             listItems: allItems
+        })
+    }
+    moveToDone(selectedItem){
+        //console.log(selectedItem)
+        var doneList = this.state.doneItems;
+        doneList.push(selectedItem.textContent);
+        //console.log(doneList);
+        var done = this.state.listItems;
+        done.splice(selectedItem.id,1);
+        this.setState({
+            listItems: done,
+            doneItems: doneList
         })
     }
     render() {
@@ -110,8 +132,8 @@ class App extends React.Component {
                     </select>
                 </div>
                 <input type="submit" value="Add" onClick={this.handleAdd}></input>
-                <List list={this.state.listItems}></List>
-                <Done></Done>
+                <List list={this.state.listItems} handleMove={this.moveToDone}></List>
+                <Done allDone={this.state.doneItems}></Done>
             </div>
         )
     }
