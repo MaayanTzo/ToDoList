@@ -108,10 +108,8 @@ class App extends React.Component {
             month: this.month.value,
             year: this.year.value
         }
-        //console.log(newItem);
         var allItems = this.state.listItems;
         allItems.push(newItem);
-        //console.log(allItems);
         this.setState({
             listItems: allItems
         })
@@ -119,7 +117,6 @@ class App extends React.Component {
     //move the selected item to the done list
     moveToDone(selectedItem) {
         if (selectedItem.classList.contains("remove")) {
-            //console.log("dont move");
             this.setState({
                 toRemove: ""
             })
@@ -146,7 +143,6 @@ class App extends React.Component {
     //move the selected item back to the todo list
     moveBackToDo(selectedItem) {
         if (selectedItem.classList.contains("remove")) {
-            //console.log("dont move");
             this.setState({
                 toRemove: ""
             })
@@ -160,7 +156,6 @@ class App extends React.Component {
                 month: activityDate[activityDate.length - 2],
                 year: activityDate[activityDate.length - 1]
             }
-            //console.log(itemToDo);
             var toDoList = this.state.listItems;
             toDoList.push(itemToDo);
             var toDo = this.state.doneItems;
@@ -173,7 +168,6 @@ class App extends React.Component {
     }
     //remove the selected todo item
     handleRemove() {
-        //console.log("working");
         this.setState({
             toRemove: "remove"
         })
@@ -181,7 +175,6 @@ class App extends React.Component {
     removeItem(itemToRemove) {
         var currentToDoList = this.state.listItems;
         currentToDoList.splice(itemToRemove.id, 1);
-        //console.log(currentToDoList);
         this.setState({
             listItems: currentToDoList
         })
