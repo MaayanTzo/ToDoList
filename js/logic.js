@@ -17,7 +17,7 @@ class List extends React.Component {
     removeItem(event) {
         if (event.target.classList.contains("remove")) {
             this.props.removeItem(event.target);
-        } 
+        }
     }
     render() {
         var updatedList = this.props.list;
@@ -27,8 +27,8 @@ class List extends React.Component {
         }
         return (
             <div>
-                <h3>To Do: </h3>
-                <ul onClick={this.markAsDone}>
+                <h3 className="to-do title">To Do: </h3>
+                <ul onClick={this.markAsDone} className="list">
                     {displayedList}
                 </ul>
             </div>
@@ -49,7 +49,7 @@ class Done extends React.Component {
     removeDoneItem(event) {
         if (event.target.classList.contains("remove")) {
             this.props.removeDoneItem(event.target);
-        } 
+        }
     }
     render() {
         var doneList = this.props.allDone;
@@ -59,8 +59,8 @@ class Done extends React.Component {
         }
         return (
             <div>
-                <h3>Done: </h3>
-                <ul onClick={this.markAsToDo}>
+                <h3 className="done title">Done: </h3>
+                <ul onClick={this.markAsToDo} className="done-list">
                     {displayedDone}
                 </ul>
             </div>
@@ -209,22 +209,31 @@ class App extends React.Component {
         }
         return (
             <div>
-                <input type="text" ref={this.saveNewItem}></input>
-                <div>
-                    <select ref={this.getDay}>
-                        {displayDays}
-                    </select>
-                    <select ref={this.getMonth}>
-                        {displayMonths}
-                    </select>
-                    <select ref={this.getYear}>
-                        {displayYears}
-                    </select>
+                <div className="header">
+                    <div className="bucket-list">My Bucket List</div>
+                    <img className="logo" src="https://www.buckil.com/css/UIFront/images/trues.png" />
                 </div>
-                <input type="submit" value="Add" onClick={this.handleAdd}></input>
+                <div className="input-wrapper">
+                    <div className="input-activity">
+                        <div>Add an item:</div>
+                        <input type="text" ref={this.saveNewItem}></input>
+                    </div>
+                    <div className="date-wrapper">
+                        <select ref={this.getDay}>
+                            {displayDays}
+                        </select>
+                        <select ref={this.getMonth}>
+                            {displayMonths}
+                        </select>
+                        <select ref={this.getYear}>
+                            {displayYears}
+                        </select>
+                    </div>
+                    <input className="add-button" type="submit" value="Add" onClick={this.handleAdd}></input>
+                </div>
                 <List list={this.state.listItems} handleMove={this.moveToDone} toRemove={this.state.toRemove} removeItem={this.removeItem}></List>
                 <Done allDone={this.state.doneItems} handleMoveBack={this.moveBackToDo} toRemove={this.state.toRemove} removeDoneItem={this.removeDoneItem}></Done>
-                <input type="submit" value="Remove" onClick={this.handleRemove}></input>
+                <input type="submit" value="Remove" onClick={this.handleRemove} className="remove-button"></input>
             </div>
         )
     }

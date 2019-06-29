@@ -1,3 +1,72 @@
 body {
-    background: white;
+    background-image: url('https://cdn-images-1.medium.com/max/2600/1*cJGOTZpNaTwSaW08o6JJaw.jpeg');
+    background-size: cover;
+    margin: 0;
 }
+.bucket-list {
+    margin-left: 10px;
+    font-family: fantasy;
+    font-size: 36px;
+}
+.logo {
+    height: 100px;
+}
+.header{
+    display: flex;
+    justify-content: space-between;
+    margin-top:0px;
+    align-items: center;
+}
+.title {
+    font-family: fantasy;
+    font-size: 30px;
+}
+.to-do {
+    color: rgb(218, 84, 218);
+}
+.done {
+    color: black;
+}
+.input-wrapper{
+    display: flex;
+}
+.input-activity{
+    display: flex;
+    margin-left: 20px;
+}
+.date-wrapper{
+    display: flex;
+    margin-left: 20px;
+}
+.add-button{
+    margin-left: 20px;
+    background-color: rgb(218, 84, 218);
+    color: white;
+    border: none;
+    font-weight: bold;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.list{
+    margin-left: 20px;
+    font: 400 24px/1.0 'Just Another Hand', Helvetica, sans-serif;    margin-left: 20px;
+    list-style-image: url('../images/star.png');
+}
+.done-list{
+    font: 400 24px/1.0 'Just Another Hand', Helvetica, sans-serif;    margin-left: 20px;
+    list-style-image: url('../images/tick.png');
+}
+h3{
+    margin-left: 20px;
+}
+.remove-button{
+    margin-left: 20px;
+    background-color: darkred;
+    color: white;
+    border: none;
+    font-weight: bold;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
