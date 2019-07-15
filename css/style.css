@@ -59,14 +59,18 @@ body {
 h3{
     margin-left: 20px;
 }
-.remove-button{
+.list {
+    font-size: 40px;
+}
+.remove-item{
     margin-left: 20px;
-    background-color: darkred;
-    color: white;
+    background-color: transparent;
+    color: red;
     border: none;
     font-weight: bold;
-    padding: 5px;
+    font-size: 30px;
     padding-left: 10px;
     padding-right: 10px;
 }
+
 

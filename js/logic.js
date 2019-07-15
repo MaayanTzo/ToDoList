@@ -21,7 +21,7 @@ class List extends React.Component {
         var updatedList = this.props.list;
         var displayedList = [];
         for (let i = 0; i < updatedList.length; i++) {
-            displayedList.push(<li key={i + 2}><span key={i} id={i} onClick={this.markAsDone} >{updatedList[i].task + " on " + updatedList[i].day + " " + updatedList[i].month + " " + updatedList[i].year}</span><button key={i + 1} id={i} onClick={this.deleteToDoItem}>X</button></li>)
+            displayedList.push(<li key={i + 2} className="list"><span key={i} id={i} onClick={this.markAsDone} >{updatedList[i].task + " on " + updatedList[i].day + " " + updatedList[i].month + " " + updatedList[i].year}</span><button className="remove-item" key={i + 1} id={i} onClick={this.deleteToDoItem}>X</button></li>)
         }
         return (
             <div>
@@ -51,7 +51,7 @@ class Done extends React.Component {
         var doneList = this.props.allDone;
         var displayedDone = [];
         for (let i = 0; i < doneList.length; i++) {
-            displayedDone.push(<li key={i + 2}><span key={i} id={i} onClick={this.markAsToDo}>{doneList[i].task + " on " + doneList[i].day + " " + doneList[i].month + " " + doneList[i].year}</span><button key={i + 1} id={i} onClick={this.deleteItem}>X</button></li>)
+            displayedDone.push(<li key={i + 2} className="list"><span key={i} id={i} onClick={this.markAsToDo}>{doneList[i].task + " on " + doneList[i].day + " " + doneList[i].month + " " + doneList[i].year}</span><button key={i + 1} id={i} className="remove-item" onClick={this.deleteItem}>X</button></li>)
         }
         return (
             <div>
