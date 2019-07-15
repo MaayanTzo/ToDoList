@@ -1,6 +1,3 @@
-/**
- * Created by lotem on 1/23/2016.
- */
 
  var express = require('express');
 var app = express();

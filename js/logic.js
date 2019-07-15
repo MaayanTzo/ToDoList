@@ -75,9 +75,6 @@ class App extends React.Component {
             doneItems: [],
             toRemove: ""
         }
-        this.getDay = this.getDay.bind(this);
-        this.getMonth = this.getMonth.bind(this);
-        this.getYear = this.getYear.bind(this);
         this.saveNewItem = this.saveNewItem.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
         this.moveToDone = this.moveToDone.bind(this);
@@ -86,16 +83,7 @@ class App extends React.Component {
         this.removeItem = this.removeItem.bind(this);
         this.removeDoneItem = this.removeDoneItem.bind(this);
     }
-    //get the selected day month and year
-    getDay(input) {
-        this.day = input;
-    }
-    getMonth(input) {
-        this.month = input;
-    }
-    getYear(input) {
-        this.year = input;
-    }
+
     saveNewItem(input) {
         this.newTask = input;
     }
@@ -187,19 +175,14 @@ class App extends React.Component {
             doneItems: currentDoneList
         })
     }
+    renderOptions(arr) {
+        var displayOptions = [];
+        for (let i = 0; i < arr.length; i++) {
+            displayOptions.push(<option key={arr[i]}>{arr[i]}</option>)
+        }
+        return displayOptions;
+    }
     render() {
-        var displayDays = [];
-        for (let i = 0; i < date.days.length; i++) {
-            displayDays.push(<option key={date.days[i]}>{date.days[i]}</option>)
-        }
-        var displayMonths = [];
-        for (let i = 0; i < date.months.length; i++) {
-            displayMonths.push(<option key={date.months[i]}>{date.months[i]}</option>)
-        }
-        var displayYears = [];
-        for (let i = 0; i < date.years.length; i++) {
-            displayYears.push(<option key={date.years[i]}>{date.years[i]}</option>)
-        }
         return (
             <div>
                 <div className="header">
@@ -212,14 +195,14 @@ class App extends React.Component {
                         <input type="text" ref={this.saveNewItem}></input>
                     </div>
                     <div className="date-wrapper">
-                        <select ref={this.getDay}>
-                            {displayDays}
+                        <select ref={x => this.day = x}>
+                            {this.renderOptions(date.days)}
                         </select>
-                        <select ref={this.getMonth}>
-                            {displayMonths}
+                        <select ref={x => this.month = x}>
+                            {this.renderOptions(date.months)}
                         </select>
-                        <select ref={this.getYear}>
-                            {displayYears}
+                        <select ref={x => this.year = x}>
+                            {this.renderOptions(date.years)}
                         </select>
                     </div>
                     <input className="add-button" type="submit" value="Add" onClick={this.handleAdd}></input>
