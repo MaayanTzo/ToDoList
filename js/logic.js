@@ -7,28 +7,26 @@ class List extends React.Component {
     constructor(props) {
         super(props);
         this.markAsDone = this.markAsDone.bind(this);
-        this.removeItem = this.removeItem.bind(this);
+        this.deleteToDoItem = this.deleteToDoItem.bind(this);
     }
     //mark the selected item as done
     markAsDone(event) {
         this.props.handleMove(event.target);
     }
-    //remove item from app
-    removeItem(event) {
-        if (event.target.classList.contains("remove")) {
-            this.props.removeItem(event.target);
-        }
+    //remove selected item from app
+    deleteToDoItem(event) {
+        this.props.deleteToDoItem(event.target);
     }
     render() {
         var updatedList = this.props.list;
         var displayedList = [];
         for (let i = 0; i < updatedList.length; i++) {
-            displayedList.push(<li key={i} id={i} className={this.props.toRemove} onClick={this.removeItem}>{updatedList[i].task + " on " + updatedList[i].day + " " + updatedList[i].month + " " + updatedList[i].year}</li>)
+            displayedList.push(<li key={i + 2}><span key={i} id={i} onClick={this.markAsDone} >{updatedList[i].task + " on " + updatedList[i].day + " " + updatedList[i].month + " " + updatedList[i].year}</span><button key={i + 1} id={i} onClick={this.deleteToDoItem}>X</button></li>)
         }
         return (
             <div>
                 <h3 className="to-do title">To Do: </h3>
-                <ul onClick={this.markAsDone} className="list">
+                <ul className="list">
                     {displayedList}
                 </ul>
             </div>
@@ -39,28 +37,26 @@ class Done extends React.Component {
     constructor(props) {
         super(props);
         this.markAsToDo = this.markAsToDo.bind(this);
-        this.removeDoneItem = this.removeDoneItem.bind(this);
+        this.deleteItem = this.deleteItem.bind(this);
     }
     //mark the selected item to move back to todo
     markAsToDo(event) {
         this.props.handleMoveBack(event.target);
     }
     //remove selected item from app
-    removeDoneItem(event) {
-        if (event.target.classList.contains("remove")) {
-            this.props.removeDoneItem(event.target);
-        }
+    deleteItem(event) {
+        this.props.deleteItem(event.target);
     }
     render() {
         var doneList = this.props.allDone;
         var displayedDone = [];
         for (let i = 0; i < doneList.length; i++) {
-            displayedDone.push(<li key={i} id={i} className={this.props.toRemove} onClick={this.removeDoneItem}>{doneList[i].task + " on " + doneList[i].day + " " + doneList[i].month + " " + doneList[i].year}</li>)
+            displayedDone.push(<li key={i + 2}><span key={i} id={i} onClick={this.markAsToDo}>{doneList[i].task + " on " + doneList[i].day + " " + doneList[i].month + " " + doneList[i].year}</span><button key={i + 1} id={i} onClick={this.deleteItem}>X</button></li>)
         }
         return (
             <div>
                 <h3 className="done title">Done: </h3>
-                <ul onClick={this.markAsToDo} className="done-list">
+                <ul className="done-list">
                     {displayedDone}
                 </ul>
             </div>
@@ -72,21 +68,15 @@ class App extends React.Component {
         super(props);
         this.state = {
             listItems: [],
-            doneItems: [],
-            toRemove: ""
+            doneItems: []
         }
-        this.saveNewItem = this.saveNewItem.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
         this.moveToDone = this.moveToDone.bind(this);
         this.moveBackToDo = this.moveBackToDo.bind(this);
-        this.handleRemove = this.handleRemove.bind(this);
-        this.removeItem = this.removeItem.bind(this);
-        this.removeDoneItem = this.removeDoneItem.bind(this);
+        this.deleteItem = this.deleteItem.bind(this);
+        this.deleteToDoItem = this.deleteToDoItem.bind(this);
     }
 
-    saveNewItem(input) {
-        this.newTask = input;
-    }
     //add the user's input to the existing to do list
     handleAdd(event) {
         event.preventDefault();
@@ -101,80 +91,66 @@ class App extends React.Component {
         this.setState({
             listItems: allItems
         })
+        document.querySelector("#add-item").value = "";
     }
     //move the selected item to the done list
     moveToDone(selectedItem) {
-        if (selectedItem.classList.contains("remove")) {
-            this.setState({
-                toRemove: ""
-            })
-        } else {
-            var sliceIt = selectedItem.textContent.indexOf("on");
-            var activity = selectedItem.textContent.slice(0, sliceIt);
-            var activityDate = selectedItem.textContent.split(/\s(?=\w)/);
-            var itemDone = {
-                task: activity,
-                day: activityDate[activityDate.length - 3],
-                month: activityDate[activityDate.length - 2],
-                year: activityDate[activityDate.length - 1]
-            }
-            var doneList = this.state.doneItems;
-            doneList.push(itemDone);
-            var done = this.state.listItems;
-            done.splice(selectedItem.id, 1);
-            this.setState({
-                listItems: done,
-                doneItems: doneList
-            })
+        var sliceIt = selectedItem.textContent.indexOf("on");
+        var activity = selectedItem.textContent.slice(0, sliceIt);
+        var activityDate = selectedItem.textContent.split(/\s(?=\w)/);
+        var itemDone = {
+            task: activity,
+            day: activityDate[activityDate.length - 3],
+            month: activityDate[activityDate.length - 2],
+            year: activityDate[activityDate.length - 1]
         }
+        var doneList = this.state.doneItems;
+        doneList.push(itemDone);
+        var done = this.state.listItems;
+        done.splice(selectedItem.id, 1);
+        this.setState({
+            listItems: done,
+            doneItems: doneList
+        })
     }
     //move the selected item back to the todo list
     moveBackToDo(selectedItem) {
-        if (selectedItem.classList.contains("remove")) {
-            this.setState({
-                toRemove: ""
-            })
-        } else {
-            var sliceIt = selectedItem.textContent.indexOf("on");
-            var activity = selectedItem.textContent.slice(0, sliceIt);
-            var activityDate = selectedItem.textContent.split(/\s(?=\w)/);
-            var itemToDo = {
-                task: activity,
-                day: activityDate[activityDate.length - 3],
-                month: activityDate[activityDate.length - 2],
-                year: activityDate[activityDate.length - 1]
-            }
-            var toDoList = this.state.listItems;
-            toDoList.push(itemToDo);
-            var toDo = this.state.doneItems;
-            toDo.splice(selectedItem.id, 1);
-            this.setState({
-                listItems: toDoList,
-                doneItems: toDo
-            })
+        var sliceIt = selectedItem.textContent.indexOf("on");
+        var activity = selectedItem.textContent.slice(0, sliceIt);
+        var activityDate = selectedItem.textContent.split(/\s(?=\w)/);
+        var itemToDo = {
+            task: activity,
+            day: activityDate[activityDate.length - 3],
+            month: activityDate[activityDate.length - 2],
+            year: activityDate[activityDate.length - 1]
         }
-    }
-    //remove the selected todo item
-    handleRemove() {
+        var toDoList = this.state.listItems;
+        toDoList.push(itemToDo);
+        var toDo = this.state.doneItems;
+        toDo.splice(selectedItem.id, 1);
         this.setState({
-            toRemove: "remove"
+            listItems: toDoList,
+            doneItems: toDo
         })
     }
-    removeItem(itemToRemove) {
+    //remove the selected todo item
+    deleteToDoItem(itemToDelete) {
         var currentToDoList = this.state.listItems;
-        currentToDoList.splice(itemToRemove.id, 1);
+        currentToDoList.splice(itemToDelete.id, 1);
         this.setState({
             listItems: currentToDoList
         })
     }
     //remove the selected done item
-    removeDoneItem(itemToRemove) {
+
+    deleteItem(itemToDelete) {
         var currentDoneList = this.state.doneItems;
-        currentDoneList.splice(itemToRemove.id, 1);
+        currentDoneList.splice(itemToDelete.id, 1);
         this.setState({
             doneItems: currentDoneList
         })
     }
+
     renderOptions(arr) {
         var displayOptions = [];
         for (let i = 0; i < arr.length; i++) {
@@ -192,7 +168,7 @@ class App extends React.Component {
                 <div className="input-wrapper">
                     <div className="input-activity">
                         <div>Add an item:</div>
-                        <input type="text" ref={this.saveNewItem}></input>
+                        <input type="text" ref={x => this.newTask = x} placeholder="What's on your list?" id="add-item"></input>
                     </div>
                     <div className="date-wrapper">
                         <select ref={x => this.day = x}>
@@ -207,9 +183,8 @@ class App extends React.Component {
                     </div>
                     <input className="add-button" type="submit" value="Add" onClick={this.handleAdd}></input>
                 </div>
-                <List list={this.state.listItems} handleMove={this.moveToDone} toRemove={this.state.toRemove} removeItem={this.removeItem}></List>
-                <Done allDone={this.state.doneItems} handleMoveBack={this.moveBackToDo} toRemove={this.state.toRemove} removeDoneItem={this.removeDoneItem}></Done>
-                <input type="submit" value="Remove" onClick={this.handleRemove} className="remove-button"></input>
+                <List list={this.state.listItems} handleMove={this.moveToDone} removeItem={this.removeItem} deleteToDoItem={this.deleteToDoItem}></List>
+                <Done allDone={this.state.doneItems} handleMoveBack={this.moveBackToDo} removeDoneItem={this.removeDoneItem} deleteItem={this.deleteItem}></Done>
             </div>
         )
     }
